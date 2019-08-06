@@ -1,0 +1,15 @@
+<html>
+    <body>
+
+        {{#trips}}
+            <form action="/delete-trip" method="POST" style="display:flex; flex-direction: column;">
+            <h1>{{title}} </h1>
+            <span>{{dateDEP}} - {{dateRET}}</span>
+            <img style="width: 400px; height: auto;" src="{{image}}"/> 
+            <button>Delete</button>
+            <input type="hidden" name="tripID" value="{{title}}">
+            </form>
+        {{/trips}}
+
+    </body>
+</html>
