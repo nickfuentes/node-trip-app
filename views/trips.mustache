@@ -1,8 +1,11 @@
 <html>
+<head>
+<link rel="stylesheet"  href="styles.css">
+</head>
     <body>
 
         {{#trips}}
-            <form action="/delete-trip" method="POST" style="display:flex; flex-direction: column;">
+            <form id="tripsForm" action="/delete-trip" method="POST" >
             <h1>{{title}} </h1>
             <span>{{dateDEP}} - {{dateRET}}</span>
             <img style="width: 400px; height: auto;" src="{{image}}"/> 

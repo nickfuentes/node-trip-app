@@ -1,15 +1,19 @@
 <html>
+<head>
+<link rel="stylesheet"  href="styles.css">
+</head>
     <body>
+<h1 id="createTitlePage">Trip Advisor</h1>
 
-       <form action="/create-trip" method="POST" style="display:flex; flex-direction: column;">
+       <form id="createForm" action="/create-trip" method="POST"">
         <span>Trip Location:</span>
         <input type="text" name="tripTitle" />
         <span>Image URL:</span>
         <input type="text" name="tripImage" />
         <span>Departure Date:</span>
-        <input type="text" name="dateDEP" />
-        <span>Return Date</span>
-        <input type="text" name="dateRET" />
+        <input type="date" name="dateDEP" />
+        <span>Return Date:</span>
+        <input type="date" name="dateRET" />
         <button>Save</button>
        </form>
 

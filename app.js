@@ -6,6 +6,8 @@ const Trip = require("./models/trip")
 
 app.use(express.urlencoded({ extended: false }))
 
+app.use(express.static("css"));
+
 app.engine("mustache", mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
