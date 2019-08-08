@@ -52,7 +52,7 @@ router.post("/delete-trip", (req, res) => {
     function removeTrip(trips, tripID) {
 
         return trips.filter(function (trip) {
-            return trip.title != tripID;
+            return trip.uuid != tripID;
         });
 
     }
