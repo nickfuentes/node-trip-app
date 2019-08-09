@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const session = require('express-session')
 
-
 const Trip = require("../models/trip")
 
 // initialize session 
@@ -11,6 +10,19 @@ router.use(session({
     resave: false,
     saveUninitialized: true,
 }))
+
+// create an authentication middleware 
+function authenticate(req, res, next) {
+
+    if (req.session) {
+        if (req.session.username) {
+            // perform the original request 
+            next()
+        } else {
+            res.redirect('/login')
+        }
+    }
+}
 
 // Shows all the trips created
 router.get("/", (req, res) => {
@@ -29,11 +41,6 @@ router.post('/create-trip', (req, res) => {
     let dateDEP = req.body.dateDEP
     let dateRET = req.body.dateRET
 
-    // console.log(tripTitle)
-    // console.log(tripImage)
-    // console.log(dateDEP)
-    // console.log(dateRET)
-
     let trip = new Trip(tripTitle, tripImage, dateDEP, dateRET)
 
     trips.push(trip)
@@ -45,16 +52,12 @@ router.post('/create-trip', (req, res) => {
 // POST deletes the trip
 router.post("/delete-trip", (req, res) => {
     let tripID = req.body.tripID
-    // console.log("Trying to Delete Trip")
-    // console.log(tripID)
-    // console.log(trips)
 
     function removeTrip(trips, tripID) {
 
         return trips.filter(function (trip) {
             return trip.uuid != tripID;
         });
-
     }
 
     trips = removeTrip(trips, tripID);

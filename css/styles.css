@@ -1,5 +1,7 @@
 body {
     background-color: lightgrey;
+    display: grid;
+    justify-content: center;
 }
 
 #createTitlePage {
