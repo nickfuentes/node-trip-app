@@ -36,10 +36,12 @@ router.get("/", authenticate, (req, res) => {
     res.render('trips', { trips: trips })
 })
 
+// shows the register form
 router.get('/register', (req, res) => {
     res.render('register')
 })
 
+// Registers person into the array
 router.post('/register', (req, res) => {
 
     let username = req.body.username
@@ -52,10 +54,12 @@ router.post('/register', (req, res) => {
     res.redirect('/trips/login')
 })
 
+// Shows log in form
 router.get("/login", (req, res) => {
     res.render("login")
 })
 
+// Log in the user if in array
 router.post('/login', (req, res) => {
 
     let username = req.body.username
@@ -78,6 +82,7 @@ router.post('/login', (req, res) => {
     }
 })
 
+// Logouts the current user
 router.get('/logout', (req, res) => {
     if (req.session) {
         req.session.destroy(error => {
