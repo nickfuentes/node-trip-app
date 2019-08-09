@@ -3,6 +3,7 @@ const router = express.Router()
 const session = require('express-session')
 
 const Trip = require("../models/trip")
+const User = require('../models/user')
 
 // initialize session 
 router.use(session({
@@ -27,6 +28,49 @@ function authenticate(req, res, next) {
 // Shows all the trips created
 router.get("/", (req, res) => {
     res.render('trips', { trips: trips })
+})
+
+router.get('/register', (req, res) => {
+    res.render('register')
+})
+
+router.post('/register', (req, res) => {
+
+    let username = req.body.username
+    let password = req.body.password
+
+    let user = new User(username, password)
+
+    users.push(user)
+    console.log(users)
+    res.redirect('login')
+})
+
+router.get("/login", (req, res) => {
+    res.render("login")
+})
+
+router.post('/login', (req, res) => {
+
+    let username = req.body.username
+    let password = req.body.password
+
+    let persistedUser = users.find(user => {
+        return user.username == username && user.password == password
+    })
+
+    if (persistedUser) {
+        // user is authenticated successfully 
+        if (req.session) {
+            req.session.username = persistedUser.username
+            // where should we redirect 
+            res.redirect('trips')
+        }
+    } else {
+        // user is not authenticated successfully 
+        res.render('login', { message: 'Invalid username or password' })
+    }
+
 })
 
 // Show the FORM to create a trip
