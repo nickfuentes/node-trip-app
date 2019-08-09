@@ -20,13 +20,19 @@ function authenticate(req, res, next) {
             // perform the original request 
             next()
         } else {
-            res.redirect('/login')
+            res.redirect('/trips/login')
         }
     }
 }
 
 // Shows all the trips created
 router.get("/", (req, res) => {
+
+    if (req.session) {
+        let tripTitle = req.session.tripTitle
+        console.log(tripTitle)
+    }
+
     res.render('trips', { trips: trips })
 })
 
@@ -43,7 +49,7 @@ router.post('/register', (req, res) => {
 
     users.push(user)
     console.log(users)
-    res.redirect('login')
+    res.redirect('/trips/login')
 })
 
 router.get("/login", (req, res) => {
@@ -64,17 +70,16 @@ router.post('/login', (req, res) => {
         if (req.session) {
             req.session.username = persistedUser.username
             // where should we redirect 
-            res.redirect('trips')
+            res.redirect('/trips')
         }
     } else {
         // user is not authenticated successfully 
         res.render('login', { message: 'Invalid username or password' })
     }
-
 })
 
 // Show the FORM to create a trip
-router.get("/create-trip", (req, res) => {
+router.get("/create-trip", authenticate, (req, res) => {
     res.render("create-trip")
 })
 
@@ -88,7 +93,11 @@ router.post('/create-trip', (req, res) => {
     let trip = new Trip(tripTitle, tripImage, dateDEP, dateRET)
 
     trips.push(trip)
-    // console.log(trips)
+
+    // put something in the session
+    if (req.session) { // check if session is available 
+        req.session.tripTitle = tripTitle
+    }
 
     res.redirect("/trips")
 })
