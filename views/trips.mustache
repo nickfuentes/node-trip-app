@@ -2,6 +2,18 @@
 <head>
 <link rel="stylesheet"  href="/css/styles.css">
 </head>
+
+<header>
+    <a href="http://localhost:3000/trips/register">Register Page</a>
+    <a href="http://localhost:3000/trips/login">Login Page</a>
+    <a href="http://localhost:3000/trips">All Trips</a>
+    <a href="http://localhost:3000/trips/create-trip">Create Trip</a>
+</header>
+
+<form id="createForm" action="/trips/logout" method="GET"">
+        <button>Logout</button>
+       </form>
+
     <body>
 
         {{#trips}}

@@ -26,7 +26,7 @@ function authenticate(req, res, next) {
 }
 
 // Shows all the trips created
-router.get("/", (req, res) => {
+router.get("/", authenticate, (req, res) => {
 
     if (req.session) {
         let tripTitle = req.session.tripTitle
@@ -75,6 +75,18 @@ router.post('/login', (req, res) => {
     } else {
         // user is not authenticated successfully 
         res.render('login', { message: 'Invalid username or password' })
+    }
+})
+
+router.get('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy(error => {
+            if (error) {
+                next(error)
+            } else {
+                res.redirect('/trips/login')
+            }
+        })
     }
 })
 
