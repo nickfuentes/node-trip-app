@@ -28,15 +28,15 @@ function authenticate(req, res, next) {
 // Shows all the trips created
 router.get("/", authenticate, (req, res) => {
 
-    if (req.session) {
-        let tripTitle = req.session.tripTitle
-        console.log(tripTitle)
-    }
+    // if (req.session) {
+    //     let tripTitle = req.session.tripTitle
+    //     console.log(tripTitle)
+    // }
 
     res.render('trips', { trips: trips })
 })
 
-// shows the register form
+// Shows the register form
 router.get('/register', (req, res) => {
     res.render('register')
 })
@@ -59,7 +59,7 @@ router.get("/login", (req, res) => {
     res.render("login")
 })
 
-// Log in the user if in array
+// Log in the user into array
 router.post('/login', (req, res) => {
 
     let username = req.body.username
