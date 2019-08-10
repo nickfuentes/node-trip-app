@@ -4,10 +4,6 @@ const mustacheExpress = require("mustache-express")
 
 const tripsRouter = require('./routes/trips')
 
-global.trips = []
-
-global.users = []
-
 app.use(express.urlencoded({ extended: false }))
 
 app.use("/css", express.static(__dirname + '/css'))

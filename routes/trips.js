@@ -5,6 +5,10 @@ const session = require('express-session')
 const Trip = require("../models/trip")
 const User = require('../models/user')
 
+trips = []
+
+users = []
+
 // initialize session 
 router.use(session({
     secret: 'keyboard cat',
@@ -25,23 +29,45 @@ function authenticate(req, res, next) {
     }
 }
 
-// Shows all the trips created
-router.get("/", authenticate, (req, res) => {
+// create an authentication middleware 
+function userTrips(req, res, next) {
 
-    // if (req.session) {
-    //     let tripTitle = req.session.tripTitle
-    //     console.log(tripTitle)
-    // }
+    if (req.session) {
 
-    res.render('trips', { trips: trips })
+        let sessID = req.session.userUUID
+
+        function userTrips(trips, sessID) {
+
+            return trips.filter(function (trip) {
+                return trip.userid == sessID
+            });
+        }
+
+        myTrips = userTrips(trips, sessID)
+
+        if (req.session.username) {
+            // perform the original request 
+            next()
+        } else {
+            res.redirect('/trips/login')
+        }
+    }
+}
+
+// GET Shows all the trips created
+router.get("/", userTrips, (req, res) => {
+
+    res.render('trips', { myTrips })
+    console.log(req.session)
+    console.log(trips)
 })
 
-// Shows the register form
+// GET Shows the register form
 router.get('/register', (req, res) => {
     res.render('register')
 })
 
-// Registers person into the array
+// POST Registers user in array
 router.post('/register', (req, res) => {
 
     let username = req.body.username
@@ -54,12 +80,12 @@ router.post('/register', (req, res) => {
     res.redirect('/trips/login')
 })
 
-// Shows log in form
+// GET Shows log in form
 router.get("/login", (req, res) => {
     res.render("login")
 })
 
-// Log in the user into array
+// POST Logins in the user
 router.post('/login', (req, res) => {
 
     let username = req.body.username
@@ -73,6 +99,7 @@ router.post('/login', (req, res) => {
         // user is authenticated successfully 
         if (req.session) {
             req.session.username = persistedUser.username
+            req.session.userUUID = persistedUser.userUUID
             // where should we redirect 
             res.redirect('/trips')
         }
@@ -80,6 +107,7 @@ router.post('/login', (req, res) => {
         // user is not authenticated successfully 
         res.render('login', { message: 'Invalid username or password' })
     }
+    // console.log(req.session)
 })
 
 // Logouts the current user
@@ -93,9 +121,11 @@ router.get('/logout', (req, res) => {
             }
         })
     }
+    console.log("User Logged Out!")
+    console.log(req.session)
 })
 
-// Show the FORM to create a trip
+// GET Shows the create trip form
 router.get("/create-trip", authenticate, (req, res) => {
     res.render("create-trip")
 })
@@ -106,16 +136,19 @@ router.post('/create-trip', (req, res) => {
     let tripImage = req.body.tripImage
     let dateDEP = req.body.dateDEP
     let dateRET = req.body.dateRET
+    let userid = req.session.userUUID
 
-    let trip = new Trip(tripTitle, tripImage, dateDEP, dateRET)
+    let trip = new Trip(tripTitle, tripImage, dateDEP, dateRET, userid)
 
     trips.push(trip)
 
     // put something in the session
     if (req.session) { // check if session is available 
         req.session.tripTitle = tripTitle
+        req.session.tripTitle = tripTitle
     }
-
+    console.log(req.session)
+    console.log(trips)
     res.redirect("/trips")
 })
 
@@ -126,11 +159,11 @@ router.post("/delete-trip", (req, res) => {
     function removeTrip(trips, tripID) {
 
         return trips.filter(function (trip) {
-            return trip.uuid != tripID;
+            return trip.tripUUID != tripID
         });
     }
 
-    trips = removeTrip(trips, tripID);
+    trips = removeTrip(trips, tripID)
 
     res.redirect("/trips")
 })

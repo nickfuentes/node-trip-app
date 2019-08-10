@@ -16,19 +16,19 @@
 
     <body>
 
-        {{#trips}}
+        {{#myTrips}}
             <form id="tripsForm" action="/trips/delete-trip" method="POST" >
             <h1>{{title}} </h1>
             <span>{{dateDEP}} - {{dateRET}}</span>
-            <img style="width: 400px; height: auto;" src="{{image}}"/> 
+            <img src="{{image}}"/> 
             <button>Delete</button>
-            <input type="hidden" name="tripID" value="{{uuid}}">
+            <input type="hidden" name="tripID" value="{{tripUUID}}">
             </form>
-        {{/trips}}
+        {{/myTrips}}
 
-        {{^trips}}
+        {{^myTrips}}
         <h1>No Trips Exists!</h2>
-        {{/trips}}
+        {{/myTrips}}
 
 
     </body>
